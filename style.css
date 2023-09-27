@@ -43,9 +43,13 @@ body{
 .notes-data{
     margin-top: 10px;
     padding: 15px 10px;
-    display: flex;
-    width: 100%;
+    /*display: flex;*/
+    /*width: 100%;*/
     align-items: baseline;
+}
+
+#note {
+    display: flex;
 }
 
 .notes-data ul{
@@ -85,3 +89,7 @@ button:hover{
     color: red;
 }
 
+.note-block {
+    display: inline-block;
+    width: 80%;
+}

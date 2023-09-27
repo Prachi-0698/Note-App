@@ -1,12 +1,25 @@
-const userInput = document.getElementById('note-input')
+const userInput = document.getElementById('note-input');
 // console.log(userInput)
-const addBtn = document.getElementById('add-btn')
-const notes_data = document.querySelector('.notes-data')
+const submitButton = document.getElementById('add-btn');
+submitButton.innerText = 'Add';
 
-let notes = [];
-console.log(notes)
+const notes_data = document.querySelector('.notes-data');
+const notesList = document.getElementById('notes-list');
+let elementToEdit = null;
 
-const addNote = () => {
+
+
+const addNote = (ele) => {
+
+    if(ele.currentTarget.innerText == 'Edit') {
+        console.log('Editing text');
+
+        elementToEdit.innerText = userInput.value;
+        submitButton.innerText = 'Add';
+        userInput.value = ' ';
+        return;
+    }
+
     if(userInput.value.trim() === ''){
         // console.log('Please enter a value')
         const error = document.querySelector('.error-text')
@@ -15,16 +28,9 @@ const addNote = () => {
         const error = document.querySelector('.error-text');
         error.innerText = '';
 
-        const notes_div = document.createElement('div');
-        notes_div.setAttribute('id', 'notes-container');
-        notes_data.append(notes_div);
-
         const list_ul = document.createElement('ul');
         list_ul.setAttribute('id', 'notes-list')
-        notes_div.append(list_ul);
-
-        const actions = document.createElement('div');
-        actions.classList.add('action');
+        notes_data.append(list_ul);
 
         const edit_btn = document.createElement('button');
         edit_btn.classList.add('edit-btn');
@@ -34,37 +40,47 @@ const addNote = () => {
         delete_btn.classList.add('delete-btn');
         delete_btn.innerHTML = '<i class="fa-solid fa-trash"></i>';
 
-        actions.append(edit_btn);
-        actions.append(delete_btn);
-        notes_div.append(actions);
+        const newNote = document.createElement('li');
+        newNote.setAttribute('class', 'note');
 
+        const noteBlock = document.createElement('div');
+        noteBlock.setAttribute('class', 'note-block');
+        noteBlock.textContent = userInput.value;
+        newNote.appendChild(noteBlock);
+        newNote.appendChild(edit_btn);
+        newNote.appendChild(delete_btn);
 
-        const newNote = document.createElement('li')
-        newNote.textContent = userInput.value;
-        console.log(userInput.value);
-        notes.push(newNote);
-        // const span =  document.createElement('span')
-        // span.innerHTML = '<i class="fa-solid fa-square-minus"></i>';
-        // newNote.appendChild(span);
 
 
         list_ul.appendChild(newNote);
-        delete_btn.addEventListener('click', deleteNote)
-        edit_btn.addEventListener('click', editNote)
+        
+        delete_btn.addEventListener('click', deleteNote);
+        edit_btn.addEventListener('click', editNote);
+
+        userInput.value = ' ';
     }
 }
 
-const deleteNote = () =>{
-    const removeNote = document.querySelector('li');
-    removeNote.parentNode.removeChild(removeNote)
+const deleteNote = (ele) =>{
+
+    let deleteElement = ele.currentTarget.parentNode;
+    console.log(deleteElement);
+
+    deleteElement.remove();
 }
 
-const editNote = () => {
+const editNote = (ele) => {
+    let editableElement = ele.currentTarget.parentNode;
+    elementToEdit = editableElement.firstChild;
+    let toEdit = elementToEdit.innerText;
+    console.log(toEdit);
     
+    userInput.value = toEdit;
+    submitButton.innerText = 'Edit';
 }
 
 
 
 
 
-addBtn.addEventListener('click', addNote)
+submitButton.addEventListener('click', addNote);
